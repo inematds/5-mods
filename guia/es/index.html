@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5-mods — cinco mods para Claude Code</title>
+<meta name="description" content="Cinco mods listos para Claude Code: Cache Keeper, Recording Mode, Goal Meter, Collision Guard y Next Steps. Qué son, cómo instalarlos y cómo usarlos.">
+<link rel="alternate" hreflang="pt-BR" href="https://inematds.github.io/5-mods/guia/">
+<link rel="alternate" hreflang="en" href="https://inematds.github.io/5-mods/guia/en/">
+<link rel="alternate" hreflang="es" href="https://inematds.github.io/5-mods/guia/es/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0c10; --bg2:#14141b; --card:#16161e; --line:#272730;
+    --txt:#e9e9ee; --mut:#9a9aa6; --amb:#E2A23B; --amb2:#f0c070; --sky:#38bdf8; --pro:#cbd5e1;
+    color-scheme:dark;
+  }
+  body.light{
+    --bg:#f6f7f9; --bg2:#eceef2; --card:#ffffff; --line:#e1e3ea;
+    --txt:#1a1a22; --mut:#5b5b68; --amb:#b9791d; --amb2:#a16207; --sky:#0369a1; --pro:#b45309;
+    color-scheme:light;
+  }
+  body.light .hero .glow{opacity:.5}
+  body.light pre{background:#0e0e14;color:#d6d6e0}
+  body.light pre .c{color:#8a8a98}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:Sora,sans-serif;line-height:1.15;margin:0}
+  a{color:var(--amb);text-decoration:none}
+  code,pre{font-family:"JetBrains Mono",monospace}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+  .mut{color:var(--mut)} .amb{color:var(--amb)}
+  .chip{display:inline-block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amb);font-weight:600;font-family:Sora}
+  nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(12px);background:rgba(12,12,16,.78);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;gap:22px;height:60px}
+  nav .brand{display:flex;align-items:center;gap:8px;font-family:Sora;font-weight:800;letter-spacing:-.02em;color:var(--amb)}
+  nav .brand .emoji{font-size:1.25rem}
+  nav .sep{color:var(--mut);opacity:.45}
+  nav .inema{color:var(--sky);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .inema:hover{filter:brightness(1.15)}
+  nav .pro{color:var(--pro);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .pro:hover{filter:brightness(1.15)}
+  nav .clubpro{display:inline-flex;align-items:center;gap:6px}
+  nav .links{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:.92rem}
+  nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
+  .lang{display:inline-flex;gap:2px;font-family:Sora;font-size:.78rem}
+  .lang a{color:var(--mut);padding:.2em .45em;border-radius:6px} .lang a.on{color:var(--amb);background:rgba(226,162,59,.12)}
+  .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
+  .tgl:hover{border-color:var(--amb)}
+  .btn{display:inline-block;background:var(--amb);color:#1a1206;font-weight:600;padding:.6em 1.05em;border-radius:10px;font-family:Sora}
+  .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+  @media(max-width:760px){nav .links a.sec{display:none}}
+  @media(max-width:520px){nav .wrap{gap:8px;padding:8px 14px;height:auto;flex-wrap:wrap} nav .links{gap:8px;margin-left:0;width:100%;justify-content:space-between} nav .btn{padding:.45em .7em;font-size:.82rem} .tgl{width:34px;height:34px}}
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero .glow{position:absolute;inset:-40% -20% auto auto;width:70%;height:600px;background:radial-gradient(closest-side,rgba(226,162,59,.22),transparent 70%);pointer-events:none}
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:74px 22px}
+  .hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;letter-spacing:-.025em}
+  .hero p.lead{font-size:1.18rem;color:var(--mut);margin:1.1em 0 1.6em;max-width:34ch}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero figure{margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000}
+  .hero figure img{width:100%;display:block}
+  @media(max-width:780px){.hero .wrap{grid-template-columns:1fr;padding:48px 22px}}
+  section{padding:62px 0;border-bottom:1px solid var(--line)}
+  section h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em}
+  section .sub{color:var(--mut);margin:.6em 0 2em;max-width:62ch}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.g3,.g4{grid-template-columns:1fr 1fr}}
+  @media(max-width:540px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card h3{font-size:1.05rem;margin-bottom:.4em}
+  .card p{color:var(--mut);font-size:.92rem;margin:0}
+  .num{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:8px;background:rgba(226,162,59,.14);color:var(--amb);font-family:Sora;font-weight:800;font-size:.9rem;margin-bottom:.7em}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+  .flow span{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:.45em .9em;font-size:.85rem;font-family:Sora;font-weight:600}
+  .flow .arr{color:var(--amb);border:none;background:none;padding:0 .1em}
+  pre{background:#0a0a0e;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;font-size:.86rem;line-height:1.6;color:#d6d6e0}
+  pre .c{color:#6f6f7c} pre .k{color:var(--amb2)} pre .s{color:#9ece6a}
+  .step{display:grid;grid-template-columns:46px minmax(0,1fr);gap:16px;margin-bottom:26px}
+  .step>div,.card{min-width:0}
+  p code,li code,td code{overflow-wrap:anywhere}
+  .step .b{width:46px;height:46px;border-radius:12px;background:var(--amb);color:#1a1206;font-family:Sora;font-weight:800;font-size:1.25rem;display:flex;align-items:center;justify-content:center}
+  .step h3{font-size:1.12rem;margin-bottom:.3em}
+  .step p{color:var(--mut);margin:.2em 0 .7em}
+  .ex{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:680px){.ex{grid-template-columns:1fr}}
+  .ex figure{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .ex figure img{width:100%;display:block}
+  .ex figcaption{padding:12px 14px;font-size:.88rem;color:var(--mut);background:var(--card)}
+  .phase{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .phase:last-child{border:none}
+  .phase .tag{flex:0 0 92px;font-family:Sora;font-weight:800;color:var(--amb)}
+  .phase .d strong{display:block;margin-bottom:.2em}
+  .phase .d span{color:var(--mut);font-size:.92rem}
+  footer{padding:46px 0;text-align:center;color:var(--mut);font-size:.9rem}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.3em .8em;font-size:.78rem;color:var(--mut);margin:0 4px}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="brand" href="#top"><span class="emoji">🧩</span> 5-mods</a>
+  <span class="sep">|</span>
+  <span class="clubpro">
+    <a class="inema" href="https://inema.club" target="_blank" rel="noopener">INEMA.CLUB</a>
+    <span class="sep">-</span>
+    <a class="pro" href="https://inema.pro" target="_blank" rel="noopener">PRO</a>
+  </span>
+  <div class="links">
+    <a class="sec" href="#oque">Qué son</a>
+    <a class="sec" href="#fluxo">Conceptos</a>
+    <a class="sec" href="#guia">Instalar</a>
+    <a class="sec" href="#mods">Los 5 mods</a>
+    <a class="sec" href="#faq">Dudas</a>
+    <span class="lang"><a href="../">PT</a><a href="../en/">EN</a><a class="on" href="./">ES</a></span>
+    <button class="tgl" id="themeToggle" aria-label="Cambiar tema" title="Cambiar tema">🌙</button>
+    <a class="btn" href="https://github.com/inematds/5-mods" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></nav>
+
+<header class="hero" id="top">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div>
+      <span class="chip">Claude Code · plugins con interfaz</span>
+      <h1>Cinco <span class="amb">mods</span> listos para Claude Code</h1>
+      <p class="lead">Ahorra en chats grandes, oculta datos sensibles al grabar, sigue el progreso de <code>/goal</code>, evita que dos chats editen el mismo archivo y recibe sugerencias de próximo paso. Todo local, instalado en un minuto.</p>
+      <div class="cta">
+        <a class="btn" href="#guia">Empezar la guía</a>
+        <a class="btn ghost" href="https://github.com/inematds/5-mods" target="_blank" rel="noopener">Ver en GitHub</a>
+      </div>
+    </div>
+    <figure><img src="../assets/banner-es.jpg" alt="Banner 5 MODS: cinco mods listos para Claude Code"></figure>
+  </div>
+</header>
+
+<section id="oque"><div class="wrap">
+  <span class="chip">Qué son</span>
+  <h2>Mods: Claude Code a tu manera</h2>
+  <p class="sub">Si querías que Claude Code hiciera algo distinto, se lo pides y cambia. Un mod es un pequeño módulo de JavaScript, distribuido dentro de un plugin, que corre <strong>dentro</strong> de Claude Code: dibuja en pantalla, crea comandos y pregunta con botones antes de una acción.</p>
+  <figure style="margin:0 0 26px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000"><img src="../assets/banner-grade-es.jpg" alt="Los cinco mods: Cache Keeper, Recording Mode, Goal Meter, Collision Guard y Next Steps" loading="lazy" style="width:100%;display:block"></figure>
+  <div class="grid g3">
+    <div class="card"><h3>🔥 Cache Keeper</h3><p>Muestra si el caché del chat está caliente o frío, cuánto costaría empezar de nuevo en frío, mantiene calientes los chats grandes y pasa un chat largo a uno nuevo con <code>/handoff</code>.</p></div>
+    <div class="card"><h3>🔴 Recording Mode</h3><p><code>/rec</code> antes de grabar: claves, correos, montos y archivos <code>.env</code> desaparecen de la pantalla en todos los chats abiertos.</p></div>
+    <div class="card"><h3>📊 Goal Meter</h3><p>Barra de progreso y pronóstico de término para <code>/goal</code>, a partir del plan de tareas del propio Claude.</p></div>
+    <div class="card"><h3>🛡️ Collision Guard</h3><p>Antes de editar un archivo que otro chat cambió en los últimos 30 minutos, pregunta: seguir, mover a un worktree o cancelar.</p></div>
+    <div class="card"><h3>➡️ Next Steps</h3><p>Al final de cada respuesta, hasta 3 sugerencias de próximo prompt como botones. Una tecla lo envía; otra lo descarta.</p></div>
+    <div class="card"><h3>🔒 Todo local</h3><p>Los datos quedan en <code>~/.claude/mods-data/</code>. Ningún mod hace llamadas de red propias. Licencia MIT.</p></div>
+  </div>
+</div></section>
+
+<section id="fluxo"><div class="wrap">
+  <span class="chip">Conceptos en 2 minutos</span>
+  <h2>Cómo funciona un mod</h2>
+  <p class="sub">El mod se carga cuando empieza el chat y reacciona a eventos: un prompt enviado, una herramienta a punto de ejecutarse, el fin de una respuesta. En cada evento puede dibujar, preguntar o guardar estado.</p>
+  <div class="flow">
+    <span>Empieza el chat</span><span class="arr">→</span>
+    <span>El mod se carga</span><span class="arr">→</span>
+    <span>Evento (prompt, herramienta, fin de la respuesta)</span><span class="arr">→</span>
+    <span>Dibuja · pregunta · registra</span>
+  </div>
+  <div class="grid g2" style="margin-top:22px">
+    <div class="card"><h3>Mod × hook × skill</h3><p><strong>Skill</strong> es una instrucción en Markdown que Claude lee. <strong>Hook clásico</strong> es un comando de shell que bloquea o permite, sin interfaz. <strong>Mod</strong> hace lo que hace el hook y además dibuja en pantalla, crea comandos y recuerda estado.</p></div>
+    <div class="card"><h3>Contexto</h3><p>Todo lo que está en el chat. Con cada mensaje, el modelo relee el contexto completo. Un chat largo supera fácilmente los 100k tokens.</p></div>
+    <div class="card"><h3>Caché de prompt</h3><p>Releer desde el caché cuesta ~10 % del precio. El caché expira con el chat detenido (5 min o 1 h). Al volver, el primer mensaje lo regraba todo hasta a 2× el precio: el “reinicio en frío”.</p></div>
+    <div class="card"><h3><code>/goal</code> y worktree</h3><p><code>/goal</code> ejecuta un trabajo largo hasta alcanzar la meta. Un git worktree es una segunda carpeta del mismo repositorio, para que dos chats no se pisen los mismos archivos.</p></div>
+  </div>
+</div></section>
+
+<section id="pre"><div class="wrap">
+  <span class="chip">Requisitos previos</span>
+  <h2>Lo que necesitas</h2>
+  <p class="sub">Dos cosas: una versión reciente de Claude Code y los mods habilitados en tu cuenta.</p>
+  <div class="grid g2">
+    <div class="card"><h3>Claude Code 2.1.287+</h3><p>Funciona en la terminal y en la pestaña Code de la app Desktop.</p><pre><span class="k">claude --version</span>
+<span class="k">claude update</span>   <span class="c"># si es más antigua</span></pre></div>
+    <div class="card"><h3>Mods habilitados</h3><p>En una carpeta vacía: “no hooks module to load” = puede cargar; “served off” = aún no está habilitado (instala igual).</p><pre><span class="k">claude plugin test</span></pre></div>
+  </div>
+</div></section>
+
+<section id="guia"><div class="wrap">
+  <span class="chip">Guía de uso · paso a paso</span>
+  <h2>Instalar en cuatro pasos</h2>
+  <p class="sub">Lo más simple es pedírselo al propio Claude. Abajo está el camino manual, comando por comando.</p>
+
+  <div class="step"><div class="b">1</div><div>
+    <h3>Descarga el repositorio</h3>
+    <p>Clona y copia a la carpeta donde vivirá el marketplace (debe quedar fija).</p>
+<pre><span class="k">git clone</span> <span class="s">https://github.com/inematds/5-mods</span>
+<span class="k">cp -a</span> 5-mods ~/.claude/5-mods</pre>
+  </div></div>
+
+  <div class="step"><div class="b">2</div><div>
+    <h3>Registra el marketplace</h3>
+    <p>El repositorio es un marketplace de plugins llamado <code>5-mods</code>.</p>
+<pre><span class="k">claude plugin marketplace add</span> <span class="s">"$HOME/.claude/5-mods"</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">3</div><div>
+    <h3>Instala los mods, uno a la vez</h3>
+    <p>No en paralelo: todos escriben en el mismo archivo de configuración. Instala solo los que quieras.</p>
+<pre><span class="k">claude plugin install</span> cache-keeper@5-mods
+<span class="k">claude plugin install</span> recording-mode@5-mods
+<span class="k">claude plugin install</span> goal-meter@5-mods
+<span class="k">claude plugin install</span> collision-guard@5-mods
+<span class="k">claude plugin install</span> next-steps@5-mods</pre>
+  </div></div>
+
+  <div class="step"><div class="b">4</div><div>
+    <h3>Abre un chat nuevo y prueba</h3>
+    <p>El mod se carga cuando empieza el chat (<code>/clear</code> y <code>/reload-plugins</code> no cuentan). Si <code>/guard</code> responde, todo está funcionando.</p>
+<pre><span class="k">claude</span>
+<span class="k">/guard</span>   <span class="c"># responde con lo que Collision Guard está viendo</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">★</div><div>
+    <h3>O pídeselo a Claude</h3>
+    <p>Él revisa la versión, copia, registra, instala los cinco y deja una nota en tu <code>CLAUDE.md</code> global.</p>
+<pre><span class="s">Instala los cinco mods de Claude Code de esta carpeta: ~/5-mods.
+Sigue el INSTALL-FOR-CLAUDE.md que está en ella.</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">↻</div><div>
+    <h3>Actualizar y quitar</h3>
+    <p>La instalación es una copia: nada cambia hasta que actualices y abras un chat nuevo.</p>
+<pre><span class="k">claude plugin marketplace update</span> 5-mods
+<span class="k">claude plugin update</span> next-steps@5-mods
+<span class="k">claude plugin uninstall</span> next-steps@5-mods</pre>
+  </div></div>
+</div></section>
+
+<section id="mods"><div class="wrap">
+  <span class="chip">Los 5 mods en detalle</span>
+  <h2>Qué hace cada uno y cómo usarlo</h2>
+  <p class="sub">Cada mod tiene sus comandos. Todos se pueden activar y desactivar sin desinstalar.</p>
+
+  <div class="step"><div class="b">🔥</div><div>
+    <h3>Cache Keeper</h3>
+    <p>Una línea sobre el prompt muestra el estado del caché, el tamaño del contexto, cuánto costaría regrabar y el gasto de la sesión. Se pone amarilla 5 min antes de enfriarse, con el botón <code>keep warm</code>. Muestra también los límites de 5 h y semanal (amarillo al 80 %, rojo al 95 %). En un chat de más de 150k tokens con caché frío, pregunta antes de enviar: enviar, compactar antes o cancelar.</p>
+<pre><span class="c">● cache warm 42m │ ctx 412k │ rewrite ≈ $3.30 │ session $5.12</span>
+<span class="k">/keepwarm 2</span>      <span class="c"># lo mantiene caliente por 2 h (por defecto 4, máx. 24)</span>
+<span class="k">/board</span>           <span class="c"># todos los chats locales en un panel</span>
+<span class="k">/handoff</span>         <span class="c"># resume, limpia y continúa en un chat nuevo</span>
+<span class="k">/cache big 100k</span>  <span class="c"># preguntar antes de un envío en frío desde 100k</span></pre>
+    <p>Los valores en dólares siguen la tabla de la API; en la suscripción se vuelven consumo de los límites, no cobro.</p>
+  </div></div>
+
+  <div class="step"><div class="b">🔴</div><div>
+    <h3>Recording Mode</h3>
+    <p>Vale para todos los chats abiertos en hasta 3 s. Enmascara claves de API, valores de <code>.env</code>, correos, nombres, teléfonos, direcciones, números de documento y montos de dinero; oculta resultados completos de herramientas de correo, agenda, CRM y finanzas; cierra archivos sensibles. Claude sigue recibiendo los datos reales: solo cambia la pantalla.</p>
+<pre><span class="k">/rec</span>          <span class="c"># lo activa (● REC rojo sobre el prompt)</span>
+<span class="k">/rec strict</span>   <span class="c"># enmascara también todo número grande y porcentaje</span>
+<span class="k">/rec config</span>   <span class="c"># crea ~/.claude/mods-data/recording-mode/config.json</span>
+<span class="k">/rec off</span></pre>
+    <p><strong>En Latinoamérica:</strong> las palabras de negocio y los patrones de enmascaramiento están pensados en inglés. Los símbolos de moneda local, los números de identificación nacional (RFC, CUIT, RUT…) y términos de negocio en español como “facturación” pueden pasar: usa <code>/rec strict</code>, completa <code>names</code> y <code>privatePaths</code> en el config y revisa el video antes de publicar.</p>
+  </div></div>
+
+  <div class="step"><div class="b">📊</div><div>
+    <h3>Goal Meter</h3>
+    <p>Con <code>/goal</code>, Claude escribe el plan (tareas P, M o G, que valen 1, 2 y 3) y marca cada una. El pronóstico usa el ritmo del propio goal y aparece tras 2 tareas. Si surge trabajo nuevo, el plan crece y la barra puede retroceder. No hace llamadas extra al modelo.</p>
+<pre><span class="k">/goal</span> <span class="s">migrar las pruebas a Vitest y dejar todas pasando</span>
+<span class="c">5 of 8 tasks · 69%  ████████░░░  38m elapsed · about 17m left</span>
+<span class="k">/goals</span>             <span class="c"># lista de este chat + metas de los otros chats (12 h)</span>
+<span class="k">/goals strict on</span>   <span class="c"># sin editar archivos antes de que exista el plan</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">🛡️</div><div>
+    <h3>Collision Guard</h3>
+    <p>Antes de <code>Edit</code>, <code>Write</code> o <code>NotebookEdit</code>, revisa si otro chat abierto cambió ese archivo dentro de la ventana de tiempo. Si es así: <strong>Proceed</strong> (edita), <strong>Move to a worktree</strong> (cuando el archivo está en git) o <strong>Cancel</strong>. No se agrega nada al prompt.</p>
+<pre><span class="k">/guard</span>             <span class="c"># lo que está viendo</span>
+<span class="k">/guard window 60</span>   <span class="c"># ventana de 60 min en vez de 30</span>
+<span class="k">/guard off</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">➡️</div><div>
+    <h3>Next Steps</h3>
+    <p>Cuando termina la respuesta, el mod le pregunta al modelo, reutilizando el historial del chat que ya está en caché, cuáles son los próximos pasos más útiles. Las sugerencias salen en el idioma en que escribes. Se queda en silencio mientras Recording Mode está activo. Cuesta una consulta pequeña por respuesta, casi toda lectura de caché.</p>
+<pre><span class="c">→ next steps</span>
+<span class="c">  [j] Ejecuta las pruebas del módulo de login</span>
+<span class="c">  [k] Haz el commit de los cambios</span>
+<span class="c">  [l] Actualiza el README con el nuevo comando</span>
+<span class="c">  [d] dismiss</span>
+<span class="k">/next off</span>   <span class="c"># lo desactiva (vale para los chats siguientes)</span></pre>
+  </div></div>
+</div></section>
+
+<section id="exemplos"><div class="wrap">
+  <span class="chip">Un día de uso</span>
+  <h2>Los cinco trabajando juntos</h2>
+  <p class="sub">Un ejemplo realista, desde el primer chat del día hasta la grabación de un tutorial.</p>
+  <div class="phase"><div class="tag">9h</div><div class="d"><strong>Dos chats en el mismo proyecto</strong><span>Uno corrige el bug del login; el otro agrega el sello “más popular” en la página de precios.</span></div></div>
+  <div class="phase"><div class="tag">9h10</div><div class="d"><strong>Collision Guard</strong><span>Los dos quieren tocar <code>precios.html</code>. El segundo pregunta antes: seguir, worktree o cancelar.</span></div></div>
+  <div class="phase"><div class="tag">9h30</div><div class="d"><strong>Goal Meter</strong><span><code>/goal</code> de migración de pruebas: <code>3 of 7 tasks · 41%</code> y el pronóstico de término.</span></div></div>
+  <div class="phase"><div class="tag">10h</div><div class="d"><strong>Next Steps</strong><span>“Ejecuta la suite completa”, “Haz el commit”, “Actualiza el CHANGELOG”: una tecla y el prompt queda enviado.</span></div></div>
+  <div class="phase"><div class="tag">11h</div><div class="d"><strong>Cache Keeper</strong><span>Antes del almuerzo, la línea amarilla avisa. <code>keep warm</code> mantiene barato el chat de 300k; o <code>/handoff</code> empieza limpio.</span></div></div>
+  <div class="phase"><div class="tag">15h</div><div class="d"><strong>Recording Mode</strong><span><code>/rec</code> antes de grabar: los datos sensibles desaparecen de la pantalla en todos los chats. Al final, <code>/rec off</code>.</span></div></div>
+</div></section>
+
+<section id="roadmap"><div class="wrap">
+  <span class="chip">Crea el tuyo</span>
+  <h2>Tu propio mod, en español</h2>
+  <p class="sub">No necesitas saber JavaScript: describe lo que quieres ver y cuándo. Los cinco mods de este repositorio son buenos modelos; <code>next-steps</code> es el más pequeño (~180 líneas).</p>
+<pre><span class="s">Quiero un mod que, cuando escriba /pomodoro, muestre sobre el prompt
+un contador de 25 minutos y me avise con un toast cuando termine.</span>
+
+<span class="c"># estructura de un mod</span>
+mi-mod/.claude-plugin/plugin.json   <span class="c"># nombre, versión, descripción</span>
+mi-mod/hooks/hooks.json             <span class="c"># { "modules": ["./register.mjs"] }</span>
+mi-mod/hooks/register.mjs           <span class="c"># export const register = (on) => { ... }</span>
+
+<span class="k">claude plugin validate --strict</span> ./mi-mod
+<span class="k">claude plugin test</span> ./mi-mod</pre>
+  <p class="sub" style="margin-top:18px">Para cambiar un mod existente, pídelo: “collision guard debe mirar 60 minutos hacia atrás”, “nunca ocultes el nombre de mi empresa en el modo grabación”. Claude sigue el <code>CUSTOMIZE.md</code>: primero un comando, después el archivo de configuración, por último el código.</p>
+</div></section>
+
+<section id="faq"><div class="wrap">
+  <span class="chip">Dudas</span>
+  <h2>Preguntas frecuentes</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Instalé y no aparece nada</h3><p>Los mods se cargan cuando empieza el chat. Sal y ejecuta <code>claude</code> de nuevo, luego escribe <code>/guard</code>.</p></div>
+    <div class="card"><h3>“served off”</h3><p>Tu cuenta aún no recibió los mods. La instalación queda lista y empieza a funcionar cuando llegue la habilitación.</p></div>
+    <div class="card"><h3>Un comando no existe</h3><p>Otro plugin ya usaba el nombre. Usa el alternativo: <code>/next-steps</code>, <code>/ck-cache</code>, <code>/ck-handoff</code>, <code>/recording</code>, <code>/goal-meter</code>, <code>/collision-guard</code>.</p></div>
+    <div class="card"><h3>¿Se cobran los valores en dólares?</h3><p>No en la suscripción: se vuelven consumo de los límites de 5 h y semanal. Son estimaciones según el precio de la API.</p></div>
+    <div class="card"><h3>¿Funciona en la app Desktop?</h3><p>Sí, en la pestaña Code. La línea con botones sobre el prompt es de la terminal; en Desktop aparecen las etiquetas del pie y los comandos.</p></div>
+    <div class="card"><h3>Cambié el código y nada cambió</h3><p>Claude Code ejecuta una copia. Sube la versión en <code>plugin.json</code>, actualiza el marketplace y el mod, y abre un chat nuevo.</p></div>
+  </div>
+</div></section>
+
+<footer>
+  <div class="wrap">
+    <div class="pill">Claude Code 2.1.287+</div><div class="pill">JavaScript (.mjs)</div><div class="pill">MIT</div>
+    <p style="margin-top:18px">5-mods · cinco mods para Claude Code ·
+      <a href="https://github.com/inematds/5-mods">inematds/5-mods</a> ·
+      <a href="https://inema.club">INEMA.CLUB</a></p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var KEY='5-mods-theme';
+    var b=document.body, t=document.getElementById('themeToggle');
+    if(localStorage.getItem(KEY)==='light'){ b.classList.add('light'); t.textContent='☀️'; }
+    t.addEventListener('click',function(){
+      var light=b.classList.toggle('light');
+      t.textContent=light?'☀️':'🌙';
+      localStorage.setItem(KEY, light?'light':'dark');
+    });
+  })();
+</script>
+</body>
+</html>

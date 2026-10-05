@@ -1,0 +1,4 @@
+{
+  "description": "Next Steps hooks module",
+  "modules": ["./register.mjs"]
+}

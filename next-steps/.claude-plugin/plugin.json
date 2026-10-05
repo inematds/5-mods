@@ -1,0 +1,9 @@
+{
+  "name": "next-steps",
+  "version": "1.0.0",
+  "description": "After each turn, up to three suggested next prompts as buttons above the prompt: press one to send it, or dismiss (/next on|off)",
+  "author": {
+    "name": "INEMA.CLUB"
+  },
+  "license": "MIT"
+}
